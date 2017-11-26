@@ -2,6 +2,8 @@ package co.conor.randofooder;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
         foodList.add("Pasta bake");
         foodList.add("Fish and veg");
 
+
+    }
+
+    public static ArrayList<String> pickFoodsNow(){
         Collections.shuffle(foodList);
 
         int i = 0;
@@ -61,7 +67,14 @@ public class MainActivity extends AppCompatActivity {
             i ++;
         }
         System.out.println(pickedFoods);
+    }
+
+    public void pickOnClick(View a){
+        Button button = (Button) a;
+        MainActivity.pickFoodsNow();
 
     }
+
+
 
 }
