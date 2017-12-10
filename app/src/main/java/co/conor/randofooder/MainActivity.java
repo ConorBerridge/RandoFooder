@@ -3,10 +3,14 @@ package co.conor.randofooder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -14,12 +18,22 @@ public class MainActivity extends AppCompatActivity {
     static ArrayList<String> foodList;
     static ArrayList<String> weekdays;
     static ArrayList<String> pickedFoods;
+    ListView myList;
+    ArrayAdapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         MainActivity.createLists();
+
+
+        MainActivity.pickFoodsNow();
+
+        this.popList();
+
     }
 
 
@@ -58,6 +72,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void popList(){
+        pickedFoods.clear();
+
+        MainActivity.pickFoodsNow();
+
+        myList = (ListView) findViewById(R.id.foodList);
+
+        myAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pickedFoods);
+
+        myList.setAdapter(myAdapter);
+    }
+
     public static ArrayList<String> pickFoodsNow(){
         Collections.shuffle(foodList);
 
@@ -67,12 +93,13 @@ public class MainActivity extends AppCompatActivity {
             i ++;
         }
         System.out.println(pickedFoods);
+        return null;
     }
 
     public void pickOnClick(View a){
         Button button = (Button) a;
-        MainActivity.pickFoodsNow();
 
+        this.popList();
     }
 
 
