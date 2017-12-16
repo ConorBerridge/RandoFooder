@@ -102,6 +102,12 @@ public class MainActivity extends AppCompatActivity {
         this.popList();
     }
 
+    public void editListOnClick(View a){
+        Button button = (Button) a;
+
+        setContentView(R.layout.activity_food_list_editor);
+    }
+
 
 
 }

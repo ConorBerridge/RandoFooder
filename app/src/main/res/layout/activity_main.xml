@@ -7,30 +7,54 @@
     tools:context="co.conor.randofooder.MainActivity">
 
 
-    <RelativeLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="56dp"
+            android:gravity="top"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/foodList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="20dp" />
+        </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+
+        <Button
+            android:id="@+id/editListButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:onClick="editListOnClick"
+            android:text="Edit food list" />
 
         <Button
             android:id="@+id/randoFooderbut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="20dp"
+            android:layout_weight="1"
             android:onClick="pickOnClick"
             android:text="Rando fooder"
             tools:layout_editor_absoluteX="288dp"
             tools:layout_editor_absoluteY="447dp" />
+    </LinearLayout>
 
-        <ListView
-            android:id="@+id/foodList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="17dp"
-            android:layout_marginTop="20dp" />
-
-    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
