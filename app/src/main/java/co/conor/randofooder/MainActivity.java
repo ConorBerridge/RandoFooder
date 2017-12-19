@@ -1,5 +1,6 @@
 package co.conor.randofooder;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,8 +19,10 @@ public class MainActivity extends AppCompatActivity {
     static ArrayList<String> foodList;
     static ArrayList<String> weekdays;
     static ArrayList<String> pickedFoods;
+    static ArrayList<String> weekFood = new ArrayList<String>();
     ListView myList;
     ArrayAdapter myAdapter;
+    static Boolean swtichedAlready = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         MainActivity.createLists();
 
 
-        MainActivity.pickFoodsNow();
+        this.pickFoodsNow();
 
         this.popList();
 
@@ -74,24 +77,30 @@ public class MainActivity extends AppCompatActivity {
 
     public void popList(){
         pickedFoods.clear();
+        weekFood.clear();
 
-        MainActivity.pickFoodsNow();
+        this.pickFoodsNow();
 
         myList = (ListView) findViewById(R.id.foodList);
 
-        myAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, pickedFoods);
+        myAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, weekFood);
 
         myList.setAdapter(myAdapter);
     }
 
-    public static ArrayList<String> pickFoodsNow(){
+    public ArrayList<String> pickFoodsNow(){
         Collections.shuffle(foodList);
 
         int i = 0;
         while(i !=7){
             pickedFoods.add(foodList.get(i));
+            StringBuilder sb = new StringBuilder();
+            sb.append(weekdays.get(i)).append(" : ").append(pickedFoods.get(i));
+            weekFood.add(sb.toString());
             i ++;
         }
+
+
         System.out.println(pickedFoods);
         return null;
     }
@@ -104,10 +113,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void editListOnClick(View a){
         Button button = (Button) a;
+        startActivity(new Intent(MainActivity.this , FoodListEditor.class));
 
-        setContentView(R.layout.activity_food_list_editor);
     }
 
+    public static ArrayList<String> getAllFoods(){
+        return foodList;
+    }
+
+    public static void addFood(String food){
+        foodList.add(food);
+    }
 
 
 }
