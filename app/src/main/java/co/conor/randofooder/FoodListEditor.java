@@ -3,6 +3,7 @@ package co.conor.randofooder;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,11 +14,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,12 +29,13 @@ public class FoodListEditor extends AppCompatActivity {
 
 
     static String selectedValue;
+    public String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/RandoFooder";
     ListView secondList;
     ArrayAdapter secondAdapter;
     ArrayList<String> allFood = new ArrayList<String>(MainActivity.getAllFoods());
     Context context = FoodListEditor.this;
-    File path = context.getExternalFilesDir(null);
-    File file = new File(path, "RandoFooderFoodList.txt");
+    File dir;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +64,20 @@ public class FoodListEditor extends AppCompatActivity {
             }
         });
 
-        this.writeToFile();
-        this.readFile();
+
+        dir = new File(path);
+        dir.mkdirs();
+
+
+    }
+
+    public String arrayToString() {
+        StringBuilder sb = new StringBuilder();
+        for (Object s : allFood) {
+            sb.append(s);
+            sb.append("\t");
+        }
+        return sb.toString();
     }
 
     public void popList() {
@@ -80,7 +96,6 @@ public class FoodListEditor extends AppCompatActivity {
         secondList.setAdapter(secondAdapter);
     }
 
-
     public void backOnClick(View a) {
         Button button = (Button) a;
 
@@ -94,6 +109,8 @@ public class FoodListEditor extends AppCompatActivity {
         this.popList();
 
         Toast.makeText(context, selectedValue + " deleted", Toast.LENGTH_SHORT).show();
+
+        writeToSDcardFile();
     }
 
     public void saveOnClick(View a) {
@@ -102,48 +119,68 @@ public class FoodListEditor extends AppCompatActivity {
         String temp = textView.getText().toString();
         MainActivity.addFood(temp);
         this.popList();
-        this.writeToFile();
+
+        writeToSDcardFile();
+
+
     }
 
+    private void writeToSDcardFile() {
+        String fileName = "RandoFooderList";
+        StringBuilder sb = new StringBuilder();
+        for (String s : allFood){
+            sb.append(s);
+            sb.append(",");
+        }
+        String sSomeText = new String(sb.toString());
 
-    public void writeToFile() {
-        FileOutputStream stream = null;
+
+
+        File sdcard = android.os.Environment.getExternalStorageDirectory();
+        File dir = new File(sdcard.getAbsolutePath() + "/Rando");
+        dir.mkdirs();
+        File file = new File(dir, fileName);// for example "myData.txt"
         try {
-            stream = new FileOutputStream(file);
+            FileOutputStream f = new FileOutputStream(file);
+            PrintWriter pw = new PrintWriter(f);
+            pw.println(sSomeText +"Hello world!");
+            pw.println("Other text");
+            pw.flush();
+            pw.close();
+            f.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-        }
-        try {
-            stream.write("TESTESTETSTETSTETSTESTSETETSETESTESTSET".getBytes());
-            stream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void readFile() {
-        int length = (int) file.length();
 
-        byte[] bytes = new byte[length];
+    private String readFileOnExternalSD(){
+        String fileName = "RandoFooderList";
 
-        FileInputStream in = null;
+
+        File sdcard = Environment.getExternalStorageDirectory();
+
+        //Get the text file
+        File file = new File(sdcard.getAbsolutePath() + "/Rando",fileName);
+
+        //Read text from file
+        StringBuilder text = new StringBuilder();
+
         try {
-            in = new FileInputStream(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+            }
+            br.close();
         }
-        try {
-            in.read(bytes);
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        catch (IOException e) {
+            // error handling here
         }
-
-        String contents = new String(bytes);
-
-        Toast.makeText(context, contents, Toast.LENGTH_SHORT).show();
-
+        return text.toString();
     }
-
-
 }

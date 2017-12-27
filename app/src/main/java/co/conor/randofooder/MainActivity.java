@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
         pickedFoods.clear();
         weekFood.clear();
 
+        //FoodListEditor fe = new FoodListEditor();
+        //fe.readFromFile();
+
         this.pickFoodsNow();
 
         myList = (ListView) findViewById(R.id.foodList);
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         myAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, weekFood);
 
         myList.setAdapter(myAdapter);
+
     }
 
     public ArrayList<String> pickFoodsNow(){
